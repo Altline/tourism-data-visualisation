@@ -3,8 +3,10 @@
 
 <head>
     <link rel="stylesheet" href="style.css" />
+
     <script src="http://d3js.org/d3.v7.min.js" charset="utf-8"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
+
     <title>Turizam u svijetu</title>
 </head>
 
@@ -12,72 +14,207 @@
     <div id="map">
         <svg id="mapSvg" viewBox="0 0 1000 1000" width="100%" height="100%"></svg>
     </div>
+
     <div id="sidebar">
 
-        <h4>World</h4>
+        <label id="yearLabel" for="yearInput"></label>
+        <input id="yearInput" type="range" min="1995" max="2018">
+
+        <h4 id="sidebar-title"></h4>
         <svg id="barSvg" class="bar chart" viewBox="0 0 1000 1000" width="100%" height="auto"></svg>
 
-        <div style="
-            width: 100%; 
-            height: 2px; 
-            background-color: gray; 
-            margin-top: 15px;">
-        </div>
+        <div class="sidebar-divider"></div>
 
         <h5>Share by country</h5>
         <svg id="pieSvg" class="pie chart" viewBox="0 0 1000 1000" width="100%" height="auto"></svg>
 
     </div>
 
-    <script>
-        function makeSidebar() {
-            const sidebar = d3.select("#sidebar");
+    <script type="module">
 
-            const barSvg = sidebar.select("#barSvg");
+        // Functions
 
-            const pieSvg = sidebar.select("pieSvg");
+        async function loadData(path) {
+            var data;
+            await d3.json(path).then((loadedData) => {
+                data = loadedData;
+            });
+            return data;
         }
 
-        function makeMap() {
-            const mapSvg = d3.select("#mapSvg");
-            const g = mapSvg.append("g");
+        function findGlobalExtremes(tourismData) {
+            let min = Number.MAX_VALUE;
+            let max = -1;
+            for (let year = 1995; year <= 2018; year++) {
+                tourismData.forEach((d) => {
+                    const num = d[year];
+                    if (num && num != "") {
+                        if (num < min) min = num;
+                        if (num > max) max = num;
+                    }
+                });
+            }
+            return [min, max];
+        }
 
-            const projection = d3.geoEquirectangular()
-                .center([-5, 100])
-                .scale(200);
+        function findTourismByCountryName(tourismData, countryName) {
+            return tourismData.find((d) => {
+                return d["Country_Name"] == countryName;
+            });
+        }
 
-            const path = d3.geoPath()
-                .projection(projection);
+        function updateAll(year, country) {
+            selectedYear = year;
+            selectedCountry = country;
+            worldMap.update(year, country);
+            sidebar.update(year, country);
+        }
 
-            d3.json("countries-110m.json").then(function (world) {
-                const data = topojson.feature(world, world.objects.countries);
-                const countries = g.selectAll("path.country")
+
+        // Classes
+
+        class WorldMap {
+
+            constructor(mapData, tourismData) {
+                this.mapData = mapData;
+                this.tourismData = tourismData;
+
+                this.svg = d3.select("#mapSvg");
+                this.g = this.svg.append("g");
+
+                const zoom = d3.zoom()
+                    .scaleExtent([1, 80])
+                    .on('zoom', (event) => {
+                        this.g.selectAll('path')
+                            .attr('transform', event.transform);
+                    });
+                this.svg.call(zoom);
+
+                this.svg.on("click", (e) => {
+                    if (e.target.tagName == "svg") {
+                        updateAll(selectedYear, null);
+                    }
+                })
+
+                this.tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip");
+
+                const [minTourism, maxTourism] = findGlobalExtremes(tourismData);
+
+                this.colors = d3.scaleLinear()
+                    .domain([minTourism, maxTourism])
+                    .range(["white", "blue"]);
+
+                const projection = d3.geoEquirectangular()
+                    .center([-5, 70])
+                    .scale(200);
+
+                const path = d3.geoPath()
+                    .projection(projection);
+
+                const data = topojson.feature(this.mapData, this.mapData.objects.countries);
+                this.g.selectAll("path.country")
                     .data(data.features)
                     .enter()
                     .append("path")
                     .attr("class", "country")
-                    .attr("id", function (d) { return d.id; })
+                    .attr("id", (d) => { return d.id; })
                     .attr("d", path)
-                    .style("fill", "green")
-                    .style("stroke", "black")
-                    .style("stroke-width", "0.25px")
-                    .style("stroke-opacity", 1);
-            });
+                    .on("mouseover", (e) => {
+                        const countryName = e.target.__data__.properties.name;
+                        const tourism = findTourismByCountryName(this.tourismData, countryName);
 
-            const zoom = d3.zoom()
-                .scaleExtent([1, 80])
-                .on('zoom', function (event) {
-                    g.selectAll('path')
-                        .attr('transform', event.transform);
-                });
+                        this.tooltip.html(
+                            countryName + "<br/>" +
+                            (tourism && tourism[selectedYear] ? d3.format(".3s")(tourism[selectedYear]) : "")
+                        )
+                            .style("left", (event.pageX) + "px")
+                            .style("top", (event.pageY - 28) + "px");
 
-            mapSvg.call(zoom);
+                        this.tooltip.transition()
+                            .duration(200)
+                            .style("opacity", .9);
+                    })
+                    .on("mouseout", (e) => {
+                        this.tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    })
+                    .on("click", (e) => {
+                        const countryName = e.target.__data__.properties.name;
+                        const tourism = findTourismByCountryName(this.tourismData, countryName);
+                        updateAll(selectedYear, tourism);
+                    });
+            }
+
+            update() {
+                const data = topojson.feature(this.mapData, this.mapData.objects.countries);
+                this.g.selectAll("path.country")
+                    .data(data.features)
+                    .transition()
+                    .style("fill", (d) => {
+                        const tourism = findTourismByCountryName(this.tourismData, d.properties.name);
+                        if (tourism && tourism[selectedYear] != "") return this.colors(tourism[selectedYear]);
+                        else return "gray";
+                    })
+                    .style("stroke", (d) => {
+                        if (d.properties.name == selectedCountry?.Country_Name) {
+                            return "red";
+                        } else {
+                            return "black";
+                        }
+                    })
+                    .style("stroke-width", (d) => {
+                        if (d.properties.name == selectedCountry?.Country_Name) {
+                            return "4px";
+                        } else {
+                            return "0.25px";
+                        }
+                    });
+            }
         }
 
-        makeSidebar();
-        makeMap();
+        class Sidebar {
+
+            constructor(tourismData) {
+                this.tourismData = tourismData;
+
+                this.yearLabel = d3.select("#yearLabel");
+                this.titleLabel = d3.select("#sidebar-title");
+                
+                const barSvg = d3.select("#barSvg");
+                const pieSvg = d3.select("pieSvg");
+
+                const yearInput = d3.select("#yearInput");
+                yearInput.attr("value", selectedYear);
+                yearInput.on("input", (e) => {
+                    const year = e.target.valueAsNumber;
+                    updateAll(year, selectedCountry)
+                });
+            }
+
+            update() {
+                this.yearLabel.text("Year: " + selectedYear);
+                this.titleLabel.text(selectedCountry ? selectedCountry.Country_Name : "World");
+            }
+        }
+
+
+        // Globals
+
+        var selectedYear = 2000;
+        var selectedCountry = null;
+
+        const mapData = await loadData("countries-110m.json");
+        const tourismData = await loadData("tourism.json");
+
+        const worldMap = new WorldMap(mapData, tourismData);
+        const sidebar = new Sidebar(tourismData);
+
+        updateAll(selectedYear, selectedCountry);
 
     </script>
+
 </body>
 
 </html>
