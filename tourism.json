@@ -625,7 +625,7 @@
     "2016": 1500000,
     "2017": 1442000,
     "2018": 1633000,
-    "Country_Name": "Bahamas, The",
+    "Country_Name": "Bahamas",
     "Country_Code": "BHS",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -655,7 +655,7 @@
     "2016": 778000,
     "2017": 923000,
     "2018": 1053000,
-    "Country_Name": "Bosnia and Herzegovina",
+    "Country_Name": "Bosnia and Herz.",
     "Country_Code": "BIH",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -865,7 +865,7 @@
     "2016": 219000,
     "2017": 259000,
     "2018": 278000,
-    "Country_Name": "Brunei Darussalam",
+    "Country_Name": "Brunei",
     "Country_Code": "BRN",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -955,7 +955,7 @@
     "2016": 82000,
     "2017": 107000,
     "2018": "",
-    "Country_Name": "Central African Republic",
+    "Country_Name": "Central African Rep.",
     "Country_Code": "CAF",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -1135,7 +1135,7 @@
     "2016": 1583000,
     "2017": 1800000,
     "2018": 1965000,
-    "Country_Name": "Cote d'Ivoire",
+    "Country_Name": "Côte d'Ivoire",
     "Country_Code": "CIV",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -1195,7 +1195,7 @@
     "2016": 351000,
     "2017": "",
     "2018": "",
-    "Country_Name": "Congo, Dem. Rep.",
+    "Country_Name": "Dem. Rep. Congo",
     "Country_Code": "COD",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -1225,7 +1225,7 @@
     "2016": 211000,
     "2017": 149000,
     "2018": 156000,
-    "Country_Name": "Congo, Rep.",
+    "Country_Name": "Congo",
     "Country_Code": "COG",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -1675,7 +1675,7 @@
     "2016": 5959300,
     "2017": 6188000,
     "2018": 6569000,
-    "Country_Name": "Dominican Republic",
+    "Country_Name": "Dominican Rep.",
     "Country_Code": "DOM",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -1765,7 +1765,7 @@
     "2016": 5258000,
     "2017": 8157000,
     "2018": 11196000,
-    "Country_Name": "Egypt, Arab Rep.",
+    "Country_Name": "Egypt",
     "Country_Code": "EGY",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -2275,7 +2275,7 @@
     "2016": 450000,
     "2017": 522000,
     "2018": 552000,
-    "Country_Name": "Gambia, The",
+    "Country_Name": "Gambia",
     "Country_Code": "GMB",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -2335,7 +2335,7 @@
     "2016": "",
     "2017": "",
     "2018": "",
-    "Country_Name": "Equatorial Guinea",
+    "Country_Name": "Eq. Guinea",
     "Country_Code": "GNQ",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -2815,7 +2815,7 @@
     "2016": 4942000,
     "2017": 4867000,
     "2018": 7295000,
-    "Country_Name": "Iran, Islamic Rep.",
+    "Country_Name": "Iran",
     "Country_Code": "IRN",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -3115,7 +3115,7 @@
     "2016": 321000,
     "2017": 421000,
     "2018": 423000,
-    "Country_Name": "Kyrgyz Republic",
+    "Country_Name": "Kyrgyzstan",
     "Country_Code": "KGZ",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -3235,7 +3235,7 @@
     "2016": 17242000,
     "2017": 13336000,
     "2018": 15347000,
-    "Country_Name": "Korea, Rep.",
+    "Country_Name": "South Korea",
     "Country_Code": "KOR",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -3865,7 +3865,7 @@
     "2016": 510000,
     "2017": 631000,
     "2018": 707000,
-    "Country_Name": "North Macedonia",
+    "Country_Name": "Macedonia",
     "Country_Code": "MKD",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -4795,7 +4795,7 @@
     "2016": "",
     "2017": "",
     "2018": "",
-    "Country_Name": "Korea, Dem. People’s Rep.",
+    "Country_Name": "North Korea",
     "Country_Code": "PRK",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -5035,7 +5035,7 @@
     "2016": 24571000,
     "2017": 24390000,
     "2018": 24551000,
-    "Country_Name": "Russian Federation",
+    "Country_Name": "Russia",
     "Country_Code": "RUS",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -5395,7 +5395,7 @@
     "2016": "",
     "2017": "",
     "2018": "",
-    "Country_Name": "South Sudan",
+    "Country_Name": "S. Sudan",
     "Country_Code": "SSD",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -5515,7 +5515,7 @@
     "2016": 2027000,
     "2017": 2162000,
     "2018": 2256000,
-    "Country_Name": "Slovak Republic",
+    "Country_Name": "Slovakia",
     "Country_Code": "SVK",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -5695,7 +5695,7 @@
     "2016": "",
     "2017": "",
     "2018": "",
-    "Country_Name": "Syrian Arab Republic",
+    "Country_Name": "Syria",
     "Country_Code": "SYR",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -6205,7 +6205,7 @@
     "2016": 76407480,
     "2017": 77186740,
     "2018": 79745920,
-    "Country_Name": "United States",
+    "Country_Name": "United States of America",
     "Country_Code": "USA",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
@@ -6567,6 +6567,36 @@
     "2018": 2580000,
     "Country_Name": "Zimbabwe",
     "Country_Code": "ZWE",
+    "Indicator_Name": "International tourism, number of arrivals",
+    "Indicator_Code": "ST.INT.ARVL"
+  },
+  {
+    "1995": 4488000,
+    "1996": 4915000,
+    "1997": 4976000,
+    "1998": 5732000,
+    "1999": 5890000,
+    "2000": 5872000,
+    "2001": 5787000,
+    "2002": 6430000,
+    "2003": 6505000,
+    "2004": 6678000,
+    "2005": 7369000,
+    "2006": 8396000,
+    "2007": 9091000,
+    "2008": 9592000,
+    "2009": 7012000,
+    "2010": 8074000,
+    "2011": 8339000,
+    "2012": 9188000,
+    "2013": 9537000,
+    "2014": 9549000,
+    "2015": 8904000,
+    "2016": 10044000,
+    "2017": 10285000,
+    "2018": 10472000,
+    "Country_Name": "South Africa",
+    "Country_Code": "ZAF",
     "Indicator_Name": "International tourism, number of arrivals",
     "Indicator_Code": "ST.INT.ARVL"
   }
