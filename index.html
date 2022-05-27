@@ -124,17 +124,28 @@
                             countryName + "<br/>" +
                             (tourism && tourism[selectedYear] ? d3.format(".3s")(tourism[selectedYear]) : "")
                         )
-                            .style("left", (event.pageX) + "px")
-                            .style("top", (event.pageY - 28) + "px");
+                            .style("left", (e.pageX + 10) + "px")
+                            .style("top", (e.pageY - 30) + "px");
 
                         this.tooltip.transition()
                             .duration(200)
                             .style("opacity", .9);
+
+                        if (tourism != selectedCountry) {
+                            e.target.style.strokeWidth = "1.5px";
+                        }
                     })
                     .on("mouseout", (e) => {
                         this.tooltip.transition()
                             .duration(500)
                             .style("opacity", 0);
+
+                        const countryName = e.target.__data__.properties.name;
+                        const tourism = findTourismByCountryName(tourismData, countryName);
+
+                        if (tourism != selectedCountry) {
+                            e.target.style.strokeWidth = "0.25px";
+                        }
                     })
                     .on("click", (e) => {
                         const countryName = e.target.__data__.properties.name;

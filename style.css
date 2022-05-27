@@ -31,10 +31,6 @@ path.country {
     stroke-width: 0.25px;
 }
 
-path.country:hover {
-    stroke-width: 1.5px;
-}
-
 
 .tooltip {
     position: absolute;
