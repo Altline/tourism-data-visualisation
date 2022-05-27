@@ -64,3 +64,8 @@ path.country:hover {
     background-color: gray; 
     margin-top: 15px;
 }
+
+.sidebar-row {
+    display:flex; 
+    justify-content: space-between;
+}

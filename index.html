@@ -20,7 +20,10 @@
         <label id="yearLabel" for="yearInput"></label>
         <input id="yearInput" type="range" min="1995" max="2018">
 
-        <h4 id="sidebar-title"></h4>
+        <div class="sidebar-row">
+            <h4 id="countryLabel"></h4>
+            <h4 id="countryTourism"></h4>
+        </div>
         <svg id="barSvg" class="bar chart" viewBox="0 0 1000 1000" width="100%" height="auto"></svg>
 
         <div class="sidebar-divider"></div>
@@ -180,8 +183,9 @@
                 this.tourismData = tourismData;
 
                 this.yearLabel = d3.select("#yearLabel");
-                this.titleLabel = d3.select("#sidebar-title");
-                
+                this.countryLabel = d3.select("#countryLabel");
+                this.tourismLabel = d3.select("#countryTourism");
+
                 const barSvg = d3.select("#barSvg");
                 const pieSvg = d3.select("pieSvg");
 
@@ -195,7 +199,18 @@
 
             update() {
                 this.yearLabel.text("Year: " + selectedYear);
-                this.titleLabel.text(selectedCountry ? selectedCountry.Country_Name : "World");
+
+                if (selectedCountry) {
+                    this.countryLabel.text(selectedCountry.Country_Name);
+                    this.tourismLabel.text(
+                        selectedCountry[selectedYear] ?
+                            "Incoming tourists: " + d3.format(".3s")(selectedCountry[selectedYear])
+                            : "No data"
+                    );
+                } else {
+                    this.countryLabel.text("World");
+                    this.tourismLabel.text("");
+                }
             }
         }
 
