@@ -36,19 +36,6 @@ path.country:hover {
 }
 
 
-.chart {
-    background-color: rgb(75, 75, 75);
-}
-
-.bar {
-
-}
-
-.pie {
-
-}
-
-
 .tooltip {
     position: absolute;
     padding: 4px;

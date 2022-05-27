@@ -6,6 +6,7 @@
 
     <script src="http://d3js.org/d3.v7.min.js" charset="utf-8"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <title>Turizam u svijetu</title>
 </head>
@@ -24,12 +25,7 @@
             <h4 id="countryLabel"></h4>
             <h4 id="countryTourism"></h4>
         </div>
-        <svg id="barSvg" class="bar chart" viewBox="0 0 1000 1000" width="100%" height="auto"></svg>
-
-        <div class="sidebar-divider"></div>
-
-        <h5>Share by country</h5>
-        <svg id="pieSvg" class="pie chart" viewBox="0 0 1000 1000" width="100%" height="auto"></svg>
+        <canvas id="historyChart" width="100%" height="auto"></canvas>
 
     </div>
 
@@ -78,10 +74,7 @@
 
         class WorldMap {
 
-            constructor(mapData, tourismData) {
-                this.mapData = mapData;
-                this.tourismData = tourismData;
-
+            constructor() {
                 this.svg = d3.select("#mapSvg");
                 this.g = this.svg.append("g");
 
@@ -115,7 +108,7 @@
                 const path = d3.geoPath()
                     .projection(projection);
 
-                const data = topojson.feature(this.mapData, this.mapData.objects.countries);
+                const data = topojson.feature(mapData, mapData.objects.countries);
                 this.g.selectAll("path.country")
                     .data(data.features)
                     .enter()
@@ -125,7 +118,7 @@
                     .attr("d", path)
                     .on("mouseover", (e) => {
                         const countryName = e.target.__data__.properties.name;
-                        const tourism = findTourismByCountryName(this.tourismData, countryName);
+                        const tourism = findTourismByCountryName(tourismData, countryName);
 
                         this.tooltip.html(
                             countryName + "<br/>" +
@@ -145,18 +138,18 @@
                     })
                     .on("click", (e) => {
                         const countryName = e.target.__data__.properties.name;
-                        const tourism = findTourismByCountryName(this.tourismData, countryName);
+                        const tourism = findTourismByCountryName(tourismData, countryName);
                         updateAll(selectedYear, tourism);
                     });
             }
 
             update() {
-                const data = topojson.feature(this.mapData, this.mapData.objects.countries);
+                const data = topojson.feature(mapData, mapData.objects.countries);
                 this.g.selectAll("path.country")
                     .data(data.features)
                     .transition()
                     .style("fill", (d) => {
-                        const tourism = findTourismByCountryName(this.tourismData, d.properties.name);
+                        const tourism = findTourismByCountryName(tourismData, d.properties.name);
                         if (tourism && tourism[selectedYear] != "") return this.colors(tourism[selectedYear]);
                         else return "gray";
                     })
@@ -179,15 +172,10 @@
 
         class Sidebar {
 
-            constructor(tourismData) {
-                this.tourismData = tourismData;
-
+            constructor() {
                 this.yearLabel = d3.select("#yearLabel");
                 this.countryLabel = d3.select("#countryLabel");
                 this.tourismLabel = d3.select("#countryTourism");
-
-                const barSvg = d3.select("#barSvg");
-                const pieSvg = d3.select("pieSvg");
 
                 const yearInput = d3.select("#yearInput");
                 yearInput.attr("value", selectedYear);
@@ -195,6 +183,31 @@
                     const year = e.target.valueAsNumber;
                     updateAll(year, selectedCountry)
                 });
+
+
+                const yearLabels = [];
+                for (let i = 1995; i <= 2018; i++) {
+                    yearLabels.push(i.toString());
+                }
+
+                const historyData = {
+                    labels: yearLabels,
+                    datasets: [{}]
+                };
+
+                const historyChartConfig = {
+                    type: "bar",
+                    data: historyData,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                };
+
+                this.historyChart = new Chart(document.getElementById("historyChart"), historyChartConfig);
             }
 
             update() {
@@ -211,6 +224,26 @@
                     this.countryLabel.text("World");
                     this.tourismLabel.text("");
                 }
+
+                if (selectedYear == this.lastSelectedYear) {
+                    if (selectedCountry) {
+                        const yearData = [];
+                        for (let i = 1995; i <= 2018; i++) {
+                            yearData.push(selectedCountry[i]);
+                        }
+
+                        this.historyChart.data.datasets[0] = {
+                            label: "Number of tourist arrivals",
+                            backgroundColor: "lightblue",
+                            data: yearData,
+                        };
+                    } else {
+                        this.historyChart.data.datasets = [];
+                    }
+                }
+
+                this.historyChart.update();
+                this.lastSelectedYear = selectedYear;
             }
         }
 
@@ -223,8 +256,8 @@
         const mapData = await loadData("countries-110m.json");
         const tourismData = await loadData("tourism.json");
 
-        const worldMap = new WorldMap(mapData, tourismData);
-        const sidebar = new Sidebar(tourismData);
+        const worldMap = new WorldMap();
+        const sidebar = new Sidebar();
 
         updateAll(selectedYear, selectedCountry);
 
