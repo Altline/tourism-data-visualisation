@@ -88,7 +88,7 @@
 
                 this.svg.on("click", (e) => {
                     if (e.target.tagName == "svg") {
-                        updateAll(selectedYear, null);
+                        updateAll(selectedYear, worldTourismData);
                     }
                 })
 
@@ -184,6 +184,7 @@
         class Sidebar {
 
             constructor() {
+                this.lastSelectedYear = selectedYear;
                 this.yearLabel = d3.select("#yearLabel");
                 this.countryLabel = d3.select("#countryLabel");
                 this.tourismLabel = d3.select("#countryTourism");
@@ -224,33 +225,25 @@
             update() {
                 this.yearLabel.text("Year: " + selectedYear);
 
-                if (selectedCountry) {
-                    this.countryLabel.text(selectedCountry.Country_Name);
-                    this.tourismLabel.text(
-                        selectedCountry[selectedYear] ?
-                            "Incoming tourists: " + d3.format(".3s")(selectedCountry[selectedYear])
-                            : "No data"
-                    );
-                } else {
-                    this.countryLabel.text("World");
-                    this.tourismLabel.text("");
-                }
+                this.countryLabel.text(selectedCountry.Country_Name);
+                this.tourismLabel.text(
+                    selectedCountry[selectedYear] ?
+                        "Incoming tourists: " + d3.format(".3s")(selectedCountry[selectedYear])
+                        : "No data"
+                );
+
 
                 if (selectedYear == this.lastSelectedYear) {
-                    if (selectedCountry) {
-                        const yearData = [];
-                        for (let i = 1995; i <= 2018; i++) {
-                            yearData.push(selectedCountry[i]);
-                        }
-
-                        this.historyChart.data.datasets[0] = {
-                            label: "Number of tourist arrivals",
-                            backgroundColor: "lightblue",
-                            data: yearData,
-                        };
-                    } else {
-                        this.historyChart.data.datasets = [];
+                    const yearData = [];
+                    for (let i = 1995; i <= 2018; i++) {
+                        yearData.push(selectedCountry[i]);
                     }
+
+                    this.historyChart.data.datasets[0] = {
+                        label: "Number of tourist arrivals",
+                        backgroundColor: "lightblue",
+                        data: yearData,
+                    };
                 }
 
                 this.historyChart.update();
@@ -262,15 +255,16 @@
         // Globals
 
         var selectedYear = 2000;
-        var selectedCountry = null;
+        var selectedCountry;
 
         const mapData = await loadData("countries-110m.json");
         const tourismData = await loadData("tourism.json");
+        const worldTourismData = await loadData("tourism-world.json");
 
         const worldMap = new WorldMap();
         const sidebar = new Sidebar();
 
-        updateAll(selectedYear, selectedCountry);
+        updateAll(selectedYear, worldTourismData);
 
     </script>
 
