@@ -19,7 +19,8 @@
     <div id="sidebar">
 
         <label id="yearLabel" for="yearInput"></label>
-        <input id="yearInput" type="range" min="1995" max="2018">
+        <input id="yearInput" type="range" min="1995" max="2018" />
+        <button id="playButton"></button>
 
         <div class="sidebar-row">
             <h4 id="countryLabel"></h4>
@@ -188,14 +189,18 @@
                 this.yearLabel = d3.select("#yearLabel");
                 this.countryLabel = d3.select("#countryLabel");
                 this.tourismLabel = d3.select("#countryTourism");
+                this.yearInput = d3.select("#yearInput");
+                this.playButton = d3.select("#playButton");
 
-                const yearInput = d3.select("#yearInput");
-                yearInput.attr("value", selectedYear);
-                yearInput.on("input", (e) => {
+                this.playButton.on("click", () => {
+                    this.togglePlay();
+                });
+
+                this.yearInput.attr("value", selectedYear);
+                this.yearInput.on("input", (e) => {
                     const year = e.target.valueAsNumber;
                     updateAll(year, selectedCountry)
                 });
-
 
                 const yearLabels = [];
                 for (let i = 1995; i <= 2018; i++) {
@@ -224,6 +229,7 @@
 
             update() {
                 this.yearLabel.text("Year: " + selectedYear);
+                this.playButton.text(playing ? "Stop" : "Play");
 
                 this.countryLabel.text(selectedCountry.Country_Name);
                 this.tourismLabel.text(
@@ -249,6 +255,30 @@
                 this.historyChart.update();
                 this.lastSelectedYear = selectedYear;
             }
+
+            togglePlay() {
+                if (!playing) {
+                    playing = true;
+                    this.updatePlay();
+                    playIntervalId = setInterval(() => {
+                        this.updatePlay();
+                    }, 500);
+                } else {
+                    playing = false;
+                    clearInterval(playIntervalId);
+                    playIntervalId = null;
+                    this.playButton.text("Play");
+                }
+            }
+
+            updatePlay() {
+                selectedYear++
+                this.yearInput.attr("value", selectedYear);
+                if (selectedYear == 2019) {
+                    selectedYear = 1995;
+                }
+                updateAll(selectedYear, selectedCountry);
+            }
         }
 
 
@@ -256,6 +286,9 @@
 
         var selectedYear = 2000;
         var selectedCountry;
+
+        var playing = false;
+        var playIntervalId = null;
 
         const mapData = await loadData("countries-110m.json");
         const tourismData = await loadData("tourism.json");
