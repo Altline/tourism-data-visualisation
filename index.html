@@ -259,11 +259,9 @@
                         yearData.push(selectedCountry[i]);
                     }
 
-                    this.historyChart.data.datasets[0] = {
-                        label: "Number of tourist arrivals",
-                        backgroundColor: "lightblue",
-                        data: yearData,
-                    };
+                    this.historyChart.data.datasets[0].label = "Number of tourist arrivals";
+                    this.historyChart.data.datasets[0].backgroundColor = "lightblue";
+                    this.historyChart.data.datasets[0].data = yearData;
                 }
 
                 this.historyChart.update();
