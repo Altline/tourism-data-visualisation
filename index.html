@@ -79,13 +79,13 @@
                 this.svg = d3.select("#mapSvg");
                 this.g = this.svg.append("g");
 
-                const zoom = d3.zoom()
+                this.zoom = d3.zoom()
                     .scaleExtent([1, 80])
                     .on('zoom', (event) => {
                         this.g.selectAll('path')
                             .attr('transform', event.transform);
                     });
-                this.svg.call(zoom);
+                this.svg.call(this.zoom);
 
                 this.svg.on("click", (e) => {
                     if (e.target.tagName == "svg") {
@@ -148,22 +148,36 @@
                             e.target.style.strokeWidth = "0.25px";
                         }
                     })
-                    .on("click", (e) => {
+                    .on("click", (e, d) => {
+                        const [[x0, y0], [x1, y1]] = path.bounds(d);
                         const countryName = e.target.__data__.properties.name;
                         const tourism = findTourismByCountryName(tourismData, countryName);
+                        this.svg.transition().duration(750).call(
+                            this.zoom.transform,
+                            d3.zoomIdentity
+                                .translate(this.width / 2, this.height / 2)
+                                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / this.width, (y1 - y0) / this.height)))
+                                .translate(-(x0 + x1) / 2, -(y0 + y1) / 2 + 20),
+                            d3.pointer(event, this.svg.node())
+                        );
                         updateAll(selectedYear, tourism);
                     });
+
+                this.width = this.svg.node().getBBox().width;
+                this.height = this.svg.node().getBBox().height;
             }
 
             update() {
                 const data = topojson.feature(mapData, mapData.objects.countries);
+
                 this.g.selectAll("path.country")
                     .data(data.features)
                     .transition()
+                    .duration(500)
                     .style("fill", (d) => {
                         const tourism = findTourismByCountryName(tourismData, d.properties.name);
                         if (tourism && tourism[selectedYear] != "") return this.colors(tourism[selectedYear]);
-                        else return "gray";
+                        else return "rgb(50, 50, 70)";
                     })
                     .style("stroke", (d) => {
                         if (d.properties.name == selectedCountry?.Country_Name) {
