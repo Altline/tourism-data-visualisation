@@ -89,6 +89,7 @@
 
                 this.svg.on("click", (e) => {
                     if (e.target.tagName == "svg") {
+                        this.zoomOut();
                         updateAll(selectedYear, worldTourismData);
                     }
                 })
@@ -152,15 +153,20 @@
                         const [[x0, y0], [x1, y1]] = path.bounds(d);
                         const countryName = e.target.__data__.properties.name;
                         const tourism = findTourismByCountryName(tourismData, countryName);
-                        this.svg.transition().duration(750).call(
-                            this.zoom.transform,
-                            d3.zoomIdentity
-                                .translate(this.width / 2, this.height / 2)
-                                .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / this.width, (y1 - y0) / this.height)))
-                                .translate(-(x0 + x1) / 2, -(y0 + y1) / 2 + 20),
-                            d3.pointer(event, this.svg.node())
-                        );
-                        updateAll(selectedYear, tourism);
+                        if (tourism == selectedCountry) {
+                            this.zoomOut();
+                            updateAll(selectedYear, worldTourismData);
+                        } else {
+                            this.svg.transition().duration(750).call(
+                                this.zoom.transform,
+                                d3.zoomIdentity
+                                    .translate(this.width / 2, this.height / 2)
+                                    .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / this.width, (y1 - y0) / this.height)))
+                                    .translate(-(x0 + x1) / 2, -(y0 + y1) / 2 + 20),
+                                d3.pointer(event, this.svg.node())
+                            );
+                            updateAll(selectedYear, tourism);
+                        }
                     });
 
                 this.width = this.svg.node().getBBox().width;
@@ -188,11 +194,19 @@
                     })
                     .style("stroke-width", (d) => {
                         if (d.properties.name == selectedCountry?.Country_Name) {
-                            return "4px";
+                            return "2px";
                         } else {
                             return "0.25px";
                         }
                     });
+            }
+
+            zoomOut() {
+                this.svg.transition().duration(750).call(
+                    this.zoom.transform,
+                    d3.zoomIdentity,
+                    d3.pointer(event, this.svg.node())
+                );
             }
         }
 
