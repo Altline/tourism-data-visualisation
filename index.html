@@ -276,9 +276,9 @@
                     this.historyChart.data.datasets[0].label = "Number of tourist arrivals";
                     this.historyChart.data.datasets[0].backgroundColor = "lightblue";
                     this.historyChart.data.datasets[0].data = yearData;
+                    this.historyChart.update();
                 }
 
-                this.historyChart.update();
                 this.lastSelectedYear = selectedYear;
             }
 
