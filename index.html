@@ -224,7 +224,7 @@
                     this.togglePlay();
                 });
 
-                this.yearInput.attr("value", selectedYear);
+                this.yearInput.property("value", selectedYear);
                 this.yearInput.on("input", (e) => {
                     const year = e.target.valueAsNumber;
                     updateAll(year, selectedCountry)
@@ -299,7 +299,7 @@
 
             updatePlay() {
                 selectedYear++
-                this.yearInput.attr("value", selectedYear);
+                this.yearInput.property("value", selectedYear);
                 if (selectedYear == 2019) {
                     selectedYear = 1995;
                 }
