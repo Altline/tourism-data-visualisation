@@ -52,3 +52,18 @@ path.country {
     display:flex; 
     justify-content: space-between;
 }
+
+#legend {
+    height: 15px;
+    margin-top: 15px;
+    background-image: linear-gradient(to right, white, blue);
+}
+
+#legend-labels {
+    display: flex;
+    justify-content: space-between;
+}
+
+#legend-labels {
+    line-height: 0;
+}

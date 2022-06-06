@@ -27,6 +27,8 @@
             <h4 id="countryTourism"></h4>
         </div>
         <canvas id="historyChart" width="100%" height="auto"></canvas>
+        <div id="legend"></div>
+        <div id="legend-labels"></div>
 
     </div>
 
@@ -253,6 +255,11 @@
                 };
 
                 this.historyChart = new Chart(document.getElementById("historyChart"), historyChartConfig);
+
+                const [minTourism, maxTourism] = findGlobalExtremes(tourismData);
+                const legendLabels = d3.select("#legend-labels");
+                legendLabels.append("p").text(d3.format(".3s")(minTourism));
+                legendLabels.append("p").text(d3.format(".3s")(maxTourism));
             }
 
             update() {
